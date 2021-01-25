@@ -12,4 +12,3 @@
 
 [options]
 all=true
-unsafe.enable_getters_and_setters=true
