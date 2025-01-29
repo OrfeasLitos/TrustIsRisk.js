@@ -42,6 +42,7 @@
     "bcoin": "git+https://github.com/bcoin-org/bcoin.git#semver:^2.1.2",
     "bcrypto": "^5.3.0",
     "graph-theory-ford-fulkerson": "^1.0.0",
+    "p-event": "^5.0.1",
     "sorted-set": "^0.3.0"
   }
 }

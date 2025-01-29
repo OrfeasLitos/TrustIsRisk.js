@@ -23,9 +23,21 @@ var fixtures = require("./fixtures");
 require("should-sinon");
 
 const COIN = consensus.COIN;
+
 const regtest = bcoin.Network.get().toString();
 
+const spvNet1 = new bcoin.Network(bcoin.network);
+const spvNet2 = new bcoin.Network('regtest');
+const minerNet = new bcoin.Network('regtest');
+console.log(spvNet1.port, spvNet2.port, minerNet.port)
+
+describe.only("lala", () => {
+});
+
 describe("SPVNode", () => {
+  let spvNet1 = null;
+  let spvNet2 = null;
+  let minerNet = null;
   var spvNode1 = null;
   var spvNode2 = null;
   var miner = null;
@@ -42,15 +54,13 @@ describe("SPVNode", () => {
 
   beforeEach("create SPV nodes", async () => {
     spvNode1 = new Trust.SPVNode({
-      network: regtest,
-      httpPort: 48445,
+      network: spvNet1,
       passphrase: "secret",
       nodes: ["127.0.0.1:48448"]
     });
 
     spvNode2 = new Trust.SPVNode({
-      network: regtest,
-      httpPort: 48446,
+      network: spvNet2,
       passphrase: "secret",
       nodes: ["127.0.0.1:48448"]
     });
@@ -83,8 +93,7 @@ describe("SPVNode", () => {
 
   beforeEach("create full node", async () => {
     miner = new Trust.FullNode({
-      network: regtest,
-      port: 48448,
+      network: minerNet,
       bip37: true,
      //logConsole: true,
      //logLevel: "debug",
@@ -246,7 +255,7 @@ describe("SPVNode", () => {
     miner.trust.addTX.should.have.been.calledThrice();
   });
 
-  describe.skip("with the nobodyLikesFrank.json example", () => {
+  describe("with the nobodyLikesFrank.json example", () => {
     var minerNames = {
       "alice": "alice",
       "bob": "bob",
@@ -406,6 +415,7 @@ describe("SPVNode", () => {
 
           node.origin.sendTX(tx);
           await watcher.origin.waitForTX(tx);
+          // TODO: below gets stuck
           await watcher.dest.waitForTX(tx);
 
           prevout[origin] = {hash: tx.hash(), index: 1};
